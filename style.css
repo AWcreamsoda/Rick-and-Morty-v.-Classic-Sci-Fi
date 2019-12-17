@@ -1,0 +1,98 @@
+html {
+		background-color: black;
+	}
+	#ocean {
+		background-image: url("space.gif");
+		width: 900px;
+		height: 700px;
+	}
+	.player {
+		position: absolute;
+		background-image: url("player1.png");
+		width: 89px;
+		height: 48px;
+	}
+	.enemy1 {
+		position: absolute;
+		width: 70px;
+		height: 88px;
+    }
+    .enemy2 {
+		position: absolute;
+		width: 70px;
+		height: 57px;
+    }
+    .enemy3 {
+		position: absolute;
+		width: 850px;
+        height: 490px;
+        z-index: 2;
+        
+	}
+	.boom {
+		position: absolute;
+		background-image: url("boom.gif");
+		width: 60px;
+		height: 88px;
+	}
+	.portal {
+		position: absolute;
+		background-image: url("portal.gif");
+		width: 50px;
+		height: 50px;
+	}
+	#pause {
+		position: fixed;
+		text-align: center;
+		font-weight: bolder;
+		font-size: xx-large;
+		display: none;
+		width: 900px;
+		height: 700px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0,0,0,0.5);
+        color: white;
+        z-index: 3;
+	}
+	#gameover {
+		position: fixed;
+		text-align: center;
+		font-weight: bolder;
+		font-size: xx-large;
+		display: none;
+		width: 900px;
+		height: 700px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0,0,0,0.5);
+        color: red;
+        z-index: 4;
+	}
+	#score {
+		font-weight: bolder;
+		color: white;
+		font-size: xx-large;
+		display: inline;
+	}
+	#level {
+		font-weight: bolder;
+		color: white;
+		font-size: xx-large;
+		display: inline;
+		position: relative;
+		left: 675px;
+    }
+    #boss-health {
+        position: absolute;
+        height: 25px;
+        width: 240px;
+        background-color: red;
+        top: 25px;
+        left: 15px;
+        outline: 1px solid white;
+    }
