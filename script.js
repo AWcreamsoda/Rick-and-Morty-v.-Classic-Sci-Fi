@@ -1,12 +1,19 @@
 let player = {
-    left: 330,
-    top: 610
+    left: 380,
+    top: 660
 }
 let enemies = [];
 let portals = [];
+let missles = [];
 let score = 0;
 let level = 1;
 let bossHealth = 100;
+const turrets = [
+    { left: 43, top: 314 },
+    { left: 457, top: 330},
+    { left: 860, top: 314 }
+    ];
+
 
 generateLevel();
 
@@ -163,12 +170,18 @@ function pauseGame() {
 }
 
 function collisionCheck() {
-    // checks for collision between enemy ships and player
+    // checks for collision between enemy ships/missle and player
     for (let enemy = enemies.length - 1; enemy >= 0; enemy--) {
         if ((player.top >= enemies[enemy].top - 45) && (player.top <= enemies[enemy].top + 55) && (player.left >= enemies[enemy].left - 75) && (player.left <= enemies[enemy].left + 60)) {
             gameOver();
         }
     }
+    for (let missle = missles.length - 1; missle >= 0; missle--) {
+        if ((player.top >= missles[missle].top - 14) && (player.top <= missles[missle].top + 25) && (player.left >= missles[missle].left - 86) && (player.left <= missles[missle].left + 4)) {
+            gameOver();
+        }   
+    }
+
     // checks for collision between portals and enemy ships
     for (let enemy = enemies.length - 1; enemy >= 0; enemy--) {
         if (enemies[enemy].boss !== true) {
@@ -194,7 +207,6 @@ function collisionCheck() {
                     playSound();
                     portals.splice(idx,1);
                     bossDamage();
-                    score += 1000;
                     break;
                 }
             }
@@ -214,6 +226,8 @@ function bossDamage() {
             if (enemies[enemy].boss === true) {
                 enemies.splice(enemy, 1);
                 clearInterval(bossInterval);
+                clearInterval(missleInterval);
+                score += 1000;
                 document.getElementById('boss-music').pause();
                 document.getElementById('background').muted = false;
                 break;
@@ -240,7 +254,18 @@ function explodeShip(top, left) {
 
 function gameOver() {
     document.getElementById('gameover').style.display = "block";
-        clearTimeout(startTime);
+    const rem1 = document.getElementById('boss-health');
+    const rem2 = document.getElementById('players');
+    const rem3 = document.getElementById('enemies');
+    const rem4 = document.getElementById('portals');
+    const rem5 = document.getElementById('missles');
+    const rem6 = document.getElementById('pause');
+    document.getElementById('ocean').removeChild(rem1);
+    document.getElementById('ocean').removeChild(rem2);
+    document.getElementById('ocean').removeChild(rem3);
+    document.getElementById('ocean').removeChild(rem4);
+    document.getElementById('ocean').removeChild(rem5);
+    document.getElementById('ocean').removeChild(rem6);
 }
 
 function updateScore() {
@@ -259,6 +284,7 @@ function levelUpdate() {
 
 function generateLevel() {
     if (level % 5 === 0) {
+        bossHealth = 100;
         document.getElementById('background').muted = true;
         document.getElementById('boss-music').load();
         document.getElementById('boss-music').play();
@@ -294,6 +320,30 @@ function generateLevel() {
             }, 1000);
         }, 4500);
 
+        setTimeout(function () {
+            missleInterval = setInterval(function () {
+                turrets.forEach(turret => {
+                    let xLocation = turret.left;
+                    let yLocation = turret.top;
+                    let directionLeft = (xLocation > player.left) ? true : false
+                    let radian = Math.atan((Math.abs(xLocation - player.left)) / (Math.abs(player.top - yLocation)));
+                    let degrees = (directionLeft) ? radians(radian) : -radians(radian);
+                    function radians(radians) {
+                        var pi = Math.PI;
+                        return radians * (180 / pi);
+                    }
+                    missles.push({
+                        left: xLocation,
+                        top: yLocation,
+                        directionLeft: directionLeft,
+                        radian: radian,
+                        degree: degrees
+                        });
+                });
+                
+            }, 2000);
+        }, 4500);
+
     } else {
         let enemyNum = level + 5;
         for (let idx = 0; idx < enemyNum; idx++) {
@@ -309,16 +359,40 @@ function generateLevel() {
     }
 }
 
+function drawMissles () {
+    let content = "";
+    for (let n = missles.length - 1; n >= 0; n--) {
+        if (missles[n].top > 708) {
+            missles.splice(n, 1);
+        }
+    }
+    for (let idx = 0; idx < missles.length; idx++) {
+        content += "<div class='missle' style='left:" + missles[idx].left + "px; top:" + missles[idx].top + "px; transform: rotate(" + missles[idx].degree + "deg);'></div>";
+    }
+    document.getElementById('missles').innerHTML = content; 
+    missles.forEach(missle => {
+        let moveRate = 2;
+        missle.top += moveRate;
+        if (missle.directionLeft === true) {
+            missle.left -= missle.radian * moveRate;
+        } else {
+            missle.left += missle.radian * moveRate;
+        }
+    })
+}
+
 let startTime;
 let bossInterval;
+let missleInterval;
 function gameLoop() {
     drawPlayer();
     drawEnemies();
     drawPortals();
+    drawMissles();
     moveEnemies();
     collisionCheck();
     updateScore();
     levelUpdate();
-    startTime = setTimeout(gameLoop, 10);
+    startTime = setTimeout(gameLoop, 15);
 }
 gameLoop();

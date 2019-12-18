@@ -79,6 +79,12 @@ html {
 		font-size: xx-large;
 		display: inline;
 	}
+	span {
+		font-weight: bolder;
+		color: white;
+		font-size: xx-large;
+		display: inline;
+	}
 	#level {
 		font-weight: bolder;
 		color: white;
@@ -95,4 +101,12 @@ html {
         top: 25px;
         left: 15px;
         outline: 1px solid white;
-    }
+	}
+	
+	.missle {
+		position: absolute;
+		width: 2px;
+		height: 30px;
+		background-color: red;
+		outline: 1px solid white;
+	}
