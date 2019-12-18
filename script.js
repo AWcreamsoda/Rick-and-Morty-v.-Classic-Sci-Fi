@@ -177,9 +177,9 @@ function collisionCheck() {
         }
     }
     for (let missle = missles.length - 1; missle >= 0; missle--) {
-        if ((player.top >= missles[missle].top - 14) && (player.top <= missles[missle].top + 50) && (player.left >= missles[missle].left - 86) && (player.left <= missles[missle].left + 4)) {
+        if ((player.top >= missles[missle].top - 14) && (player.top <= missles[missle].top + 25) && (player.left >= missles[missle].left - 86) && (player.left <= missles[missle].left + 4)) {
             gameOver();
-        }
+        }   
     }
 
     // checks for collision between portals and enemy ships
@@ -393,6 +393,6 @@ function gameLoop() {
     collisionCheck();
     updateScore();
     levelUpdate();
-    startTime = setTimeout(gameLoop, 10);
+    startTime = setTimeout(gameLoop, 15);
 }
 gameLoop();
